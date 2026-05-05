@@ -13,6 +13,15 @@ import database_models
 from models import Product, UserRegister
 
 app = FastAPI()
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=[ "*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/login")
 
 allowed_origins = [
@@ -21,15 +30,8 @@ allowed_origins = [
     if origin.strip()
 ]
 
-# Example for production: set CORS_ORIGINS to
-# http://localhost:3000,https://your-vercel-app.vercel.app
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=[ "*"],
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
+
+
 
 
 database_models.Base.metadata.create_all(bind=engine)
