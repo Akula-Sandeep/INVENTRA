@@ -19,17 +19,13 @@ function Login({ setToken }) {
 
     try {
      const params = new URLSearchParams();
-     params.append("username", emailOrUsername);  // use your input variable
+     params.append("username", registerEmail);  // use your input variable
      params.append("password", password);
 
      const response = await axios.post(
      "https://inventra-eaht.onrender.com/login",
       params,
-      {
-         headers: {
-         "Content-Type": "application/x-www-form-urlencoded",
-      },
-     }
+   
       );
 
       localStorage.setItem("token", response.data.access_token);
@@ -39,18 +35,30 @@ function Login({ setToken }) {
     }
     setLoading(false);
   };
+const handleRegister = async (e) => {
+  e.preventDefault();
+  setLoading(true);
+  setError("");
 
-  const handleRegister = async (e) => {
-    e.preventDefault();
-    setLoading(true);
-    setError("");
-
-    try {
-      axios.post("https://inventra-eaht.onrender.com/register",{
-        username,
+  try {
+    const response = await axios.post(
+      "https://inventra-eaht.onrender.com/register",
+      {
+        username: username,
         email: registerEmail,
         password: registerPassword,
-      });
+      }
+    );
+
+    console.log("REGISTER SUCCESS:", response.data);
+
+  } catch (err) {
+    console.log("REGISTER ERROR:", err.response?.data);
+    setError("Registration failed");
+  }
+
+  setLoading(false);
+};
 
       alert("Registration successful! Please login.");
       setIsRegister(false);
