@@ -22,8 +22,7 @@ function Login({ setToken }) {
       params.append("username", email);
       params.append("password", password);
 
-      const response = await axios.post(
-        "/login",
+      axios.post("https://inventra-eaht.onrender.com/login",
         params,
         {
           headers: {
@@ -46,7 +45,7 @@ function Login({ setToken }) {
     setError("");
 
     try {
-      const response = await axios.post("/register", {
+      axios.post("https://inventra-eaht.onrender.com/register",{
         username,
         email: registerEmail,
         password: registerPassword,
