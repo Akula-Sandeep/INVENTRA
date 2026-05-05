@@ -1,6 +1,6 @@
 import os
 from datetime import datetime, timedelta
-
+import hashlib
 from fastapi import FastAPI, HTTPException, Depends
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
@@ -36,12 +36,15 @@ database_models.Base.metadata.create_all(bind=engine)
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
+
 def hash_password(password: str):
-    return pwd_context.hash(password)
+    hashed = hashlib.sha256(password.encode()).hexdigest()
+    return pwd_context.hash(hashed)
 
 
 def verify_password(plain_password: str, hashed_password: str):
-    return pwd_context.verify(plain_password, hashed_password)
+    hashed = hashlib.sha256(plain_password.encode()).hexdigest()
+    return pwd_context.verify(hashed, hashed_password)
 
 
 SECRET_KEY = os.environ.get("SECRET_KEY", "change-me-locally")
