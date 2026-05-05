@@ -1,0 +1,21 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+myenv/
+.env
+*.env
+
+# Node
+node_modules/
+frontend/node_modules/
+frontend/build/
+
+# VS Code
+.vscode/
+
+# Logs
+npm-debug.log*
+pnpm-debug.log*
+yarn-debug.log*
+yarn-error.log*
