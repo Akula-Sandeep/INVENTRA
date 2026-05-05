@@ -1,5 +1,4 @@
 import os
-import hashlib
 from datetime import datetime, timedelta
 
 from fastapi import FastAPI, HTTPException, Depends
@@ -36,14 +35,13 @@ app.add_middleware(
 database_models.Base.metadata.create_all(bind=engine)
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+
 def hash_password(password: str):
-    sha_hash = hashlib.sha256(password.encode()).hexdigest()
-    return pwd_context.hash(sha_hash)
+    return pwd_context.hash(password)
 
 
 def verify_password(plain_password: str, hashed_password: str):
-    sha_hash = hashlib.sha256(plain_password.encode()).hexdigest()
-    return pwd_context.verify(sha_hash, hashed_password)
+    return pwd_context.verify(plain_password, hashed_password)
 
 
 SECRET_KEY = os.environ.get("SECRET_KEY", "change-me-locally")
