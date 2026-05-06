@@ -19,18 +19,19 @@ cors_origins = [
     "http://localhost:3000",
     "http://localhost:5173",
     "http://127.0.0.1:3000",
-    "https://inventra-eaht.onrender.com",
-    "https://inventra.vercel.app",
 ]
 
 # Add any additional origins from environment variable
 env_origins = os.environ.get("CORS_ORIGINS", "")
 if env_origins:
-    cors_origins.extend([origin.strip() for origin in env_origins.split(",") if origin.strip()])
+    cors_origins.extend(
+        [origin.strip() for origin in env_origins.split(",") if origin.strip()]
+    )
 
 app.add_middleware(
     CORSMiddleware,
     allow_origins=cors_origins,
+    allow_origin_regex=r"https://.*\.vercel\.app",
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
