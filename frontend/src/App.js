@@ -146,7 +146,14 @@
     }, [products, filter, sortField, sortDirection]);
 
     if (!token) {
-      return <Login setToken={setToken} />;
+      return  (<div className="app-bg">
+      <div className="container" style={{ textAlign: "center", paddingTop: "100px" }}>
+        <h1>INVENTRA</h1>
+        <p>Smart Inventory Management System</p>
+        <Login setToken={setToken} />
+      </div>
+    </div>
+  );
     }
 
     // Handle form input
