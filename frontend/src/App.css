@@ -199,8 +199,8 @@ body {
 .product-table {
   width: 100%;
   min-width: 720px;
-  border-collapse: separate;
-  border-spacing: 0;
+  border-collapse: collapse;
+  
   table-layout: auto;
 }
 .product-table thead th {
@@ -324,10 +324,17 @@ body {
 
 @media (max-width: 768px) {
 
+  body {
+    overflow-x: hidden;
+  }
+
+  .container {
+    padding: 12px;
+  }
+
   .topbar {
     flex-direction: column;
-    gap: 16px;
-    padding: 20px;
+    gap: 14px;
     text-align: center;
   }
 
@@ -335,10 +342,6 @@ body {
     width: 100%;
     justify-content: center;
     flex-wrap: wrap;
-  }
-
-  .container {
-    padding: 14px;
   }
 
   .stats {
@@ -355,46 +358,41 @@ body {
     width: 100%;
   }
 
-  .card {
-    padding: 18px;
-    border-radius: 18px;
-  }
-
   .content-grid {
     grid-template-columns: 1fr;
-    gap: 18px;
+  }
+
+  .card {
+    width: 100%;
+    padding: 16px;
   }
 
   .product-form {
     grid-template-columns: 1fr;
   }
 
-  .form-actions {
-    flex-direction: column;
-  }
-
-  .form-actions .btn {
-    width: 100%;
-  }
-
+  .form-actions,
   .row-actions {
     flex-direction: column;
-    align-items: stretch;
   }
 
+  .form-actions .btn,
   .row-actions .btn {
     width: 100%;
   }
 
-  .product-table {
-    min-width: 650px;
+  .scroll-x {
+    overflow-x: auto;
+    width: 100%;
   }
 
-  .brand h1 {
-    font-size: 20px;
+  .product-table th,
+  .product-table td {
+    padding: 12px 8px;
+    font-size: 12px;
   }
 
-  .chip {
-    text-align: center;
+  .desc-cell {
+    max-width: 120px;
   }
 }
