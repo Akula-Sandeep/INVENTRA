@@ -324,18 +324,22 @@ body {
 
 @media (max-width: 768px) {
 
-  body {
+  html, body, #root {
     overflow-x: hidden;
-  }
-
-  .container {
-    padding: 12px;
+    width: 100%;
   }
 
   .topbar {
     flex-direction: column;
-    gap: 14px;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
     text-align: center;
+    padding: 18px 14px;
+  }
+
+  .brand {
+    justify-content: center;
   }
 
   .top-actions {
@@ -344,14 +348,25 @@ body {
     flex-wrap: wrap;
   }
 
+  .container {
+    width: 100%;
+    padding: 12px;
+  }
+
   .stats {
     flex-direction: column;
     align-items: stretch;
+    gap: 12px;
+  }
+
+  .chip {
+    width: 100%;
+    text-align: center;
   }
 
   .stats .search {
-    margin-left: 0;
     width: 100%;
+    margin-left: 0;
   }
 
   .search input {
@@ -359,21 +374,27 @@ body {
   }
 
   .content-grid {
-    grid-template-columns: 1fr;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
   }
 
-  .card {
+  .card,
+  .tagline-card,
+  .list-card {
     width: 100%;
     padding: 16px;
   }
 
   .product-form {
-    grid-template-columns: 1fr;
+    display: flex;
+    flex-direction: column;
   }
 
-  .form-actions,
-  .row-actions {
+  .form-actions {
+    display: flex;
     flex-direction: column;
+    gap: 10px;
   }
 
   .form-actions .btn,
@@ -381,18 +402,39 @@ body {
     width: 100%;
   }
 
+  .row-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
   .scroll-x {
     overflow-x: auto;
     width: 100%;
   }
 
+  .product-table {
+    font-size: 12px;
+  }
+
   .product-table th,
   .product-table td {
-    padding: 12px 8px;
-    font-size: 12px;
+    padding: 10px 8px;
+    white-space: nowrap;
   }
 
   .desc-cell {
     max-width: 120px;
+  }
+
+  .brand h1 {
+    font-size: 20px;
+  }
+
+  .tagline-content h3 {
+    font-size: 20px;
+  }
+
+  .company-name {
+    font-size: 16px;
   }
 }
