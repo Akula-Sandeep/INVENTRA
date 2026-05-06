@@ -2,6 +2,9 @@ import { useState } from "react";
 import axios from "axios";
 import "./login.css";
 
+// Use environment variable or fallback to Render URL
+const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || "https://inventra-eaht.onrender.com";
+
 function Login({ setToken }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -18,14 +21,18 @@ function Login({ setToken }) {
     setError("");
 
     try {
-     const params = new URLSearchParams();
-     params.append("username", email);  // use your input variable
-     params.append("password", password);
+      const params = new URLSearchParams();
+      params.append("username", email);
+      params.append("password", password);
 
-     const response = await axios.post(
-     "https://inventra-eaht.onrender.com/login",
-      params,
-   
+      const response = await axios.post(
+        `${BACKEND_URL}/login`,
+        params,
+        {
+          headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+          },
+        }
       );
 
       localStorage.setItem("token", response.data.access_token);
@@ -42,11 +49,16 @@ function Login({ setToken }) {
 
     try {
       const response = await axios.post(
-        "https://inventra-eaht.onrender.com/register",
+        `${BACKEND_URL}/register`,
         {
           username: username,
           email: registerEmail,
           password: registerPassword,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
         }
       );
 

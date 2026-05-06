@@ -4,7 +4,7 @@ from sqlalchemy.orm import sessionmaker
 
 DB_URL = os.environ.get(
     "DATABASE_URL",
-    "postgresql://postgres:1234@localhost:5432/telusko",
+    "sqlite:///./test.db",  # Use SQLite for local testing
 )
 
 engine = create_engine(DB_URL, pool_pre_ping=True)

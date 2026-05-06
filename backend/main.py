@@ -14,21 +14,29 @@ from models import Product, UserRegister
 
 app = FastAPI()
 
+# Get allowed origins from environment or use defaults
+cors_origins = [
+    "http://localhost:3000",
+    "http://localhost:5173",
+    "http://127.0.0.1:3000",
+    "https://inventra-eaht.onrender.com",
+    "https://inventra.vercel.app",
+]
+
+# Add any additional origins from environment variable
+env_origins = os.environ.get("CORS_ORIGINS", "")
+if env_origins:
+    cors_origins.extend([origin.strip() for origin in env_origins.split(",") if origin.strip()])
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[ "*"],
+    allow_origins=cors_origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/login")
-
-allowed_origins = [
-    origin.strip()
-    for origin in os.environ.get("CORS_ORIGINS", "http://localhost:3000").split(",")
-    if origin.strip()
-]
 
 
 
@@ -103,26 +111,62 @@ def login_user(
     form_data: OAuth2PasswordRequestForm = Depends(),
     db: Session = Depends(get_db),
 ):
+    # Try to find user by email first, then by username
     db_user = db.query(database_models.User).filter(
         database_models.User.email == form_data.username
     ).first()
+    
     if not db_user:
         db_user = db.query(database_models.User).filter(
             database_models.User.username == form_data.username
         ).first()
 
-    if not db_user or not verify_password(form_data.password, db_user.password):
-        raise HTTPException(status_code=401, detail="Invalid username/email or password")
+    # Verify password
+    if not db_user:
+        raise HTTPException(
+            status_code=401,
+            detail="Invalid email/username or password",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+    
+    if not verify_password(form_data.password, db_user.password):
+        raise HTTPException(
+            status_code=401,
+            detail="Invalid email/username or password",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
 
+    # Create token
     access_token = create_access_token(
         data={"sub": db_user.email, "user_id": db_user.id}
     )
-    return {"access_token": access_token, "token_type": "bearer"}
+    return {
+        "access_token": access_token,
+        "token_type": "bearer",
+        "user_id": db_user.id,
+        "username": db_user.username,
+        "email": db_user.email,
+    }
 
 
 @app.get("/")
 def greet():
-    return {"message": "Welcome to this page!!"}
+    return {"message": "Welcome to Inventra API", "status": "OK"}
+
+@app.get("/health")
+def health_check():
+    """Health check endpoint for monitoring"""
+    try:
+        # Try to query the database
+        db = session()
+        db.execute("SELECT 1")
+        db.close()
+        return {"status": "healthy", "database": "connected"}
+    except Exception as e:
+        raise HTTPException(
+            status_code=503,
+            detail=f"Service unavailable: {str(e)}"
+        )
 
 def get_current_user(token: str = Depends(oauth2_scheme), db: Session = Depends(get_db)):
     try:

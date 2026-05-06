@@ -3,9 +3,14 @@
   import "./App.css";
   import TaglineSection from "./TaglineSection";
   import Login from "./login";
+
+  // Backend URL from environment or default to Render URL
+  const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || "https://inventra-eaht.onrender.com";
+
   const api = axios.create({
-    baseURL: "/",
+    baseURL: BACKEND_URL,
   });
+
   api.interceptors.request.use((config) => {
     const token = localStorage.getItem("token");
     if (token) {
